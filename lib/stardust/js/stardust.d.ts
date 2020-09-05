@@ -9,6 +9,9 @@ interface StardustOptions {
     theme: string;
     [key: string]: any;
 }
+interface AppOptions {
+    [key: string]: any;
+}
 interface Stardust {
     options?: any;
     appDefaultOptions?: any;
@@ -70,10 +73,71 @@ declare const saveOptions: () => void;
  */
 declare const resetOptions: (reload?: boolean) => void;
 /**
- * Binds options on the page to the corresponding options in the options object,
- * sets up option change events, and sets the state of the options on the page.
+ * Binds options on the page (using the 'bind-option' attribute) to the
+ * corresponding options in the options object, sets up option click and change
+ * events, and sets the state of the options on the page. An example of how to
+ * use this would be to add an option 'foo' in your app when you initialize
+ * Stardust:
+ *
+ *     initStardust({...},
+ *       options: {
+ *         foo: false,
+ *       },
+ *     });
+ *
+ * Then use the 'bind-option' tag on an HTML input on the page:
+ *
+ *     <input type="checkbox" bind-option="foo" ... />
+ *
+ * Only one option can be bound to a single HTML element this way. Actions and
+ * options can be bound to the same HTML elements.
+ *
+ * The bindOption function will be called when initStardust() is run, so if your
+ * options are hard-coded in index.html or before initializing Stardust you
+ * shouldn't need to do anything else. However, if you add options after page
+ * load or after running initStardust() you will need to call:
+ *
+ *     bindOption();
+ *
+ * @param {boolean=} stringToBoolean Whether or not to convert strings 'true'
+ *     and 'false' to boolean values when changed. Default is true.
  */
 declare const bindOptions: (stringToBoolean?: boolean) => void;
+/**
+ * Binds action handlers to elements in the DOM (using the 'bind-action'
+ * attribute) To use this, add an action handler when you initialize Stardust:
+ *
+ *     initStardust({
+ *       actions: {
+ *         doFoo: (e: Event) => {
+ *           foo(e);
+ *         },
+ *         ...
+ *       },
+ *       options: {...},
+ *     });
+ *
+ * Then use the 'bind-action' tag on an HTML element on the page:
+ *
+ *     <div type="checkbox" bind-action="click:doFoo" ... />
+ *
+ * Actions are bound using "event:action" in the "bind-action" attribute. For
+ * example, to bind the "click" event to the "doFoo" action, you would use
+ * "click:doFoo". To also bind the "hover" event to the "hoverFoo" action, you
+ * would use a semi-colon to divide the two:
+ *
+ *     <div type="checkbox" bind-action="click:doFoo;mouseover:hoverFoo" ... />
+ *
+ * An unlimited number of events and actions can be bound to a single HTML
+ * element this way. Actions and options can be bound to the same HTML elements.
+ *
+ * The bindActions function will be called when initStardust() is run, so if
+ * your elements are hard-coded in index.html or before initializing Stardust
+ * you shouldn't need to do anything else. However, if you add options after
+ * page load or after running initStardust() you will need to call:
+ *
+ *     bindActions();
+ */
 declare const bindActions: () => void;
 /** side menu **/
 /**
@@ -179,5 +243,5 @@ declare const getUrlParameter: (name: string) => string;
 /**
  * Bootstraps the Stardust application.
  */
-declare const initStardust: (initOptions: any) => void;
+declare const initStardust: (initOptions: AppOptions) => void;
 declare let stardust: Stardust;

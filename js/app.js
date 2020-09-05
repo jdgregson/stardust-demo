@@ -19,12 +19,6 @@ var initApp = function () {
             showDemoModal: function () {
                 showModal('demo');
             },
-            toggleCheckbox: function () {
-                var c = document.getElementById('checkbox');
-                if (c) {
-                    c.click();
-                }
-            },
             showToast: function () {
                 showToast('This is a toast');
             },
